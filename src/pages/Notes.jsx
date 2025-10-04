@@ -20,9 +20,9 @@ const Notes = () => {
   };
 
   return (
-    <div className="border">
-      <h1 className="text-4xl ml-25">Notes App</h1>
-      <div className="flex items-center justify-between m-4 p-5 rounded-xl">
+    <div className="border space-y-6">
+      <h1 className="text-4xl ml-25 font-bold text-gray-800">Notes App</h1>
+      <div className="flex items-center justify-between m-4 p-5 rounded-xl card">
       <input
         type="text"
         placeholder="Title"
@@ -33,7 +33,7 @@ const Notes = () => {
       />
       <textarea 
         placeholder="Write your note here..."
-        className="border rounded-md ml-2 p-2"
+        className="border rounded-md ml-2 p-2 input min-h-[200px]"
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />

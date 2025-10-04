@@ -33,15 +33,50 @@ const Timer = () => {
   }, [isRunning, timer]);
 
   return (
-    <div className="border p-4 flex flex-col items-center">
-      <input type="number" placeholder='Input Timer In seconds' onChange={handleTimer} className="bg-blue-300 rounded p-2 border-2"/>
-      <h1 className="text-4xl font-bold mb-4">{minutes}:{seconds}</h1>
-      <button 
-        onClick={handleClick} 
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        {isRunning ? "Pause" : "Start"}
-      </button>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center p-4">
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 backdrop-blur-sm bg-opacity-90">
+        <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+          Focus Timer
+        </h2>
+        
+        <div className="mb-8">
+          <label className="block text-gray-600 text-sm font-medium mb-2">
+            Duration (seconds):
+          </label>
+          <input 
+            type="number" 
+            placeholder="Enter seconds" 
+            onChange={handleTimer} 
+            className="w-full px-4 py-3 rounded-lg border border-purple-200 
+                     focus:outline-none focus:ring-2 focus:ring-purple-500 
+                     focus:border-transparent transition-all duration-200
+                     bg-purple-50"
+          />
+        </div>
+        <div className="relative mb-8">
+          <div className="text-8xl font-mono font-bold text-center tabular-nums tracking-tight
+                        bg-gradient-to-r from-purple-600 to-indigo-600 
+                        bg-clip-text text-transparent">
+            {minutes}:{seconds}
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-100 to-indigo-100 
+                        opacity-10 blur-xl -z-10 rounded-full"></div>
+        </div>
+
+        <div className="flex justify-center gap-4">
+          <button 
+            onClick={handleClick}
+            className={`px-8 py-3 rounded-lg font-semibold text-white 
+                     transition-all duration-200 transform hover:scale-105
+                     ${isRunning 
+                       ? 'bg-red-500 hover:bg-red-600' 
+                       : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+                     }`}
+          >
+            {isRunning ? 'Pause' : 'Start'}
+          </button>
+         </div>
+      </div>
     </div>
   );
 };

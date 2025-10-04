@@ -18,14 +18,17 @@ const Tasks = () => {
   };
 
   return (
-    <div>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold text-gray-800">Tasks</h1>
+      <div className="card">
+      <div className="flex gap-4 mb-4">
       <input
         type="text"
         value={taskInput}
         onChange={(e) => setTaskInput(e.target.value)}
-        className="border rounded-md p-2"
+        className="border rounded-md p-2 space-y-6"
       />
-
+     </div>
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         onClick={handleSubmit}
@@ -33,6 +36,9 @@ const Tasks = () => {
         Add Task
       </button>
 
+    </div>
+
+<div className="space-y-2">
       <ol className="list-decimal pl-5">
         {tasks.map((task, index) => (
           <li key={index} className="my-2 p-2 border rounded flex justify-between items-start">
@@ -46,6 +52,7 @@ const Tasks = () => {
           </li>
         ))}
       </ol>
+      </div>
     </div>
   );
 };
