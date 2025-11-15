@@ -1,20 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Tasks = () => {
   const [taskInput, setTaskInput] = useState(""); // for input
   const [tasks, setTasks] = useState([]); // for all tasks
+  const [loading, setLoading] = useState(false);
+  const { getAuthHeaders } = useAuth();
 
-  const handleSubmit = (e) => {
+  // Fetch tasks from API
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/tasks', {
+        headers: getAuthHeaders(),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setTasks(data);
+      } else if (response.status === 401) {
+        console.error('Unauthorized - please login again');
+      }
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!taskInput) return;
 
-    const newTask = taskInput; // simple string task
-    setTasks([...tasks, newTask]); // add to array
-    setTaskInput(""); // reset input
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ text: taskInput }),
+      });
+      
+      if (response.ok) {
+        const newTask = await response.json();
+        setTasks([newTask, ...tasks]);
+        setTaskInput(""); // reset input
+      } else if (response.status === 401) {
+        console.error('Unauthorized - please login again');
+      }
+    } catch (error) {
+      console.error('Error creating task:', error);
+    }
   };
 
-  const deleteTask = (indexToRemove) => {
-    setTasks(tasks.filter((_, index) => index !== indexToRemove));
+  const deleteTask = async (taskId) => {
+    try {
+      const response = await fetch(`/api/tasks/${taskId}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
+      
+      if (response.ok) {
+        setTasks(tasks.filter((task) => task._id !== taskId));
+      } else if (response.status === 401) {
+        console.error('Unauthorized - please login again');
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   };
 
   return (
@@ -39,13 +93,14 @@ const Tasks = () => {
     </div>
 
 <div className="space-y-2">
+      {loading && <p>Loading tasks...</p>}
       <ol className="list-decimal pl-5">
-        {tasks.map((task, index) => (
-          <li key={index} className="my-2 p-2 border rounded flex justify-between items-start">
-            <span>{task}</span>
+        {tasks.map((task) => (
+          <li key={task._id} className="my-2 p-2 border rounded flex justify-between items-start">
+            <span className={task.completed ? 'line-through text-gray-500' : ''}>{task.text}</span>
             <button
               className="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-              onClick={() => deleteTask(index)}
+              onClick={() => deleteTask(task._id)}
             >
               Delete
             </button>
