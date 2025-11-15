@@ -99,7 +99,12 @@ router.get('/me', async (req, res) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
+    console.log('[/api/auth/me] Received request');
+    console.log('[/api/auth/me] Auth header:', authHeader);
+    console.log('[/api/auth/me] Token:', token ? 'present' : 'missing');
+
     if (!token) {
+      console.log('[/api/auth/me] No token provided');
       return res.status(401).json({ message: 'No token provided' });
     }
 

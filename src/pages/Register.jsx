@@ -30,12 +30,18 @@ const Register = () => {
     setLoading(true);
 
     try {
+      console.log('Register form submitted');
       const result = await register(username, email, password);
+      console.log('Register result:', result);
 
       if (result.success) {
+        console.log('Registration successful, navigating to home');
+        navigate('/', { replace: true });
         // State will update, useEffect will handle navigation
         // Don't set loading to false here, let the redirect happen
       } else {
+        console.log('Registration failed, showing error');
+        
         setError(result.message);
         setLoading(false);
       }

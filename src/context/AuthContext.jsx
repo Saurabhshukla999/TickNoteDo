@@ -49,6 +49,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      console.log('Login attempt for:', email);
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -59,18 +60,23 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
 
+      console.log('Login response:', { ok: response.ok, status: response.status, data });
+
       if (response.ok) {
         const newToken = data.token;
         const newUser = data.user;
         
+        console.log('Login successful, setting token and user');
         // Update state synchronously
         setToken(newToken);
         setUser(newUser);
         localStorage.setItem('token', newToken);
         
+        console.log('Returning success from login');
         // Return success with user data
         return { success: true, user: newUser };
       } else {
+        console.log('Login failed:', data.message);
         return { success: false, message: data.message || 'Login failed' };
       }
     } catch (error) {
@@ -81,6 +87,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, email, password) => {
     try {
+      console.log('Register attempt for:', email);
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -91,18 +98,23 @@ export const AuthProvider = ({ children }) => {
 
       const data = await response.json();
 
+      console.log('Register response:', { ok: response.ok, status: response.status, data });
+
       if (response.ok) {
         const newToken = data.token;
         const newUser = data.user;
         
+        console.log('Registration successful, setting token and user');
         // Update state synchronously
         setToken(newToken);
         setUser(newUser);
         localStorage.setItem('token', newToken);
         
+        console.log('Returning success from register');
         // Return success with user data
         return { success: true, user: newUser };
       } else {
+        console.log('Registration failed:', data.message);
         return { success: false, message: data.message || 'Registration failed' };
       }
     } catch (error) {
